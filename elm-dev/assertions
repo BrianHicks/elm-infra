@@ -1,6 +1,0 @@
-which elm
-which elm-make
-which elm-package
-which elm-reactor
-which elm-repl
-test -d /src/Elm-Platform/0.18/.cabal-sandbox
