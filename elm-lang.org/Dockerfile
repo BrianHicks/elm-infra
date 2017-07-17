@@ -13,11 +13,8 @@ RUN cabal sandbox init --sandbox ../.cabal-sandbox
 RUN cabal install --only-dependencies
 RUN cabal configure
 RUN cabal build
+ENV PATH=$PATH:/src/Elm-Platform/$VERSION/elm-lang.org/dist/build/run-elm-website
 
-# package
-FROM haskell:7.10 as package
-
-COPY --from=build /src/Elm-Platform/0.18/elm-lang.org/dist/build/run-elm-website/run-elm-website /bin/run-elm-website
-ENV PORT=8000
-CMD ["run-elm-website", "-p", "$PORT"]
-EXPOSE $PORT
+# run
+CMD ["run-elm-website", "-p", "8000"]
+EXPOSE 8000
