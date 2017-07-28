@@ -8,14 +8,43 @@ systemd:
         Description=elm-lang.org
         After=docker.service
         Requires=docker.service
-  
+
+        [Service]
+        ExecStartPre=-/usr/bin/docker stop elmlang
+        ExecStartPre=-/usr/bin/docker rm elmlang
+        ExecStartPre=/usr/bin/docker pull brianhicks/elm-lang.org:0.18.0
+        ExecStart=/usr/bin/docker run --rm --name elmlang brianhicks/elm-lang.org:0.18.0
+        ExecStop=/usr/bin/docker stop elmlang
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: proxy.service
+      enable: true
+      contents: |
+        [Unit]
+        Description=proxy for Elm sites
+        After=elm-lang.org.service
+        Requires=docker.service
+
         [Service]
         ExecStartPre=-/usr/bin/docker stop %n
         ExecStartPre=-/usr/bin/docker rm %n
-        ExecStartPre=/usr/bin/docker pull brianhicks/elm-lang.org:0.18.0
-        ExecStart=/usr/bin/docker run --rm --name %n brianhicks/elm-lang.org:0.18.0
+        ExecStartPre=/usr/bin/docker pull brianhicks/elm-caddy:0.18.0
+        ExecStart=/usr/bin/docker run --rm \
+                                      --name %n \
+                                      -p 80:80 \
+                                      -p 443:443 \
+                                      -e ADDR=elm.letsdosome.science \
+                                      --link elmlang \
+                                      brianhicks/elm-caddy:0.18.0 \
+                                      caddy \
+                                      -agree \
+                                      -ca https://acme-staging.api.letsencrypt.org/directory \
+                                      -log /dev/stderr
+
         ExecStop=/usr/bin/docker stop %n
-  
+
         [Install]
         WantedBy=multi-user.target
 
