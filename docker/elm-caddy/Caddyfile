@@ -1,0 +1,4 @@
+localhost:8080 {
+  tls {$TLS}
+  proxy / http://{$ELMLANG_PORT_8000_TCP_ADDR}:{$ELMLANG_PORT_8000_TCP_PORT}
+}
