@@ -9,21 +9,14 @@ resource "digitalocean_ssh_key" "local" {
   public_key = "${file("~/.ssh/id_rsa.pub")}"
 }
 
-resource "digitalocean_volume" "etcd" {
-  region      = "nyc1"
-  name        = "elm-etcd"
-  size        = 1
-  description = "etcd backup"
-}
-
 resource "digitalocean_droplet" "elm-leader" {
-  image      = "ubuntu-16-04-x64"
-  name       = "elm-leader"
-  region     = "nyc1"
-  size       = "1gb"
-  ssh_keys   = ["${digitalocean_ssh_key.local.id}"]
-  volume_ids = ["${digitalocean_volume.etcd.id}"]
-  tags       = ["${digitalocean_tag.elm-leader.id}"]
+  image              = "ubuntu-16-04-x64"
+  name               = "elm-leader"
+  region             = "nyc1"
+  size               = "1gb"
+  ssh_keys           = ["${digitalocean_ssh_key.local.id}"]
+  tags               = ["${digitalocean_tag.elm-leader.id}"]
+  private_networking = true
 }
 
 resource "digitalocean_tag" "elm-leader" {
