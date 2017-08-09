@@ -18,3 +18,20 @@ This contains the Elm platform in Docker. Mostly using [this guide](https://gith
 There is a major caveat here: the current (0.18) implementation of the package site works off a couple JSON files on disk.
 This is a problem scaling up, and we'll see if that changes in the future.
 For now, we're going to pretend it's stateless and add statefulness as needed.
+
+# Kubernetes
+
+All this runs on Kubernetes!
+To get started, create a DigitalOcean key and put it in a file called `terraform.tfvars` like so:
+
+```
+do_token="your-do-token"
+```
+
+Then run `terraform apply`.
+It will output a singluar node address (just a schedulable master right now.)
+
+When the cluster comes up, copy `k8s/*` to it.
+Run `seed.sh` and then `init-leader.sh`.
+
+Congratulations, now you have a working single-node K8s cluster on which you can run anything you like!
