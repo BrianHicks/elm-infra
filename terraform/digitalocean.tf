@@ -6,17 +6,31 @@ provider "digitalocean" {
 
 resource "digitalocean_ssh_key" "local" {
   name       = "local from elm-infra"
-  public_key = "${file("~/.ssh/id_rsa.pub")}"
+  public_key = "${file("id_rsa.pub")}"
+}
+
+data "digitalocean_image" "elm-k8s-base" {
+  name = "elm-k8s-base"
 }
 
 resource "digitalocean_droplet" "elm-leader" {
-  image              = "ubuntu-16-04-x64"
+  image              = "${data.digitalocean_image.elm-k8s-base.image}"
   name               = "elm-leader"
   region             = "nyc1"
   size               = "1gb"
   ssh_keys           = ["${digitalocean_ssh_key.local.id}"]
   tags               = ["${digitalocean_tag.elm-leader.id}"]
   private_networking = true
+
+  provisioner "remote-exec" {
+    connection {
+      type = "ssh"
+      user = "root"
+      private_key = "${file("id_rsa")}"
+    }
+
+    script = "k8s/init-leader.sh"
+  }
 }
 
 resource "digitalocean_tag" "elm-leader" {
