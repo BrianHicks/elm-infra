@@ -114,6 +114,16 @@ resource "digitalocean_firewall" "elm-leader" {
 #
 # from https://kubernetes.io/docs/setup/independent/install-kubeadm/
 
+resource "null_resource" "kube-config" {
+  triggers {
+    public_ipv4 = "digitalocean_droplet.elm-leader.ipv4_address"
+  }
+
+  provisioner "local-exec" {
+    command = "scp -i id_rsa root@${digitalocean_droplet.elm-leader.ipv4_address}:~/.kube/config kube-config"
+  }
+}
+
 output "address" {
   value = "${digitalocean_droplet.elm-leader.ipv4_address}"
 }
