@@ -1,4 +1,1 @@
-coreos/config.json
-terraform.*
-.terraform
 id_rsa*
