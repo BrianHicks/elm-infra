@@ -2,16 +2,11 @@
 version: '3'
 
 services:
-  # TODO: another service to redirect bare domain to www
-  web:
+  www:
     image: "brianhicks/elm-lang.org:0.18.0"
 
     networks:
       - gateway
-
-    ports:
-      # TODO: how do we not expose this to the world? Just a firewall? That'd probably be fine.
-      - "8000:8000"
 
     deploy:
       labels:
@@ -28,6 +23,22 @@ services:
       restart_policy:
         condition: any
         window: 30s
+
+  # redirect bare domain to www
+  bare:
+    image: "brianhicks/redirect-to-www:1.0.0"
+
+    networks:
+      - gateway
+
+    deploy:
+      labels:
+        traefik.docker.network: "proxy_gateway"
+        traefik.enable: "true"
+        traefik.frontend.rule: "Host:elm-lang.org"
+        traefik.port: 80
+
+      replicas: 1
 
 networks:
   gateway:
