@@ -19,19 +19,16 @@ There is a major caveat here: the current (0.18) implementation of the package s
 This is a problem scaling up, and we'll see if that changes in the future.
 For now, we're going to pretend it's stateless and add statefulness as needed.
 
-# Kubernetes
+# Packer
 
-All this runs on Kubernetes!
-To get started, create a DigitalOcean key and put it in a file called `terraform.tfvars` like so:
+To get started, go grab a DigitalOcean account and API key, and set it in an environment variable:
 
+```shell
+DIGITALOCEAN_API_TOKEN="$(cat secure-token-location)"
 ```
-do_token="your-do-token"
-```
 
-Then run `terraform apply`.
-It will output a singluar node address (just a schedulable master right now.)
+Then run `packer validate packer/base-image.json`.
+This will make sure you're set up.
 
-When the cluster comes up, copy `k8s/*` to it.
-Run `seed.sh` and then `init-leader.sh`.
-
-Congratulations, now you have a working single-node K8s cluster on which you can run anything you like!
+If that runs successfully, you can run `packer build packer/base-image.json`.
+This will create a base infrastructure node from which to create VMs.
