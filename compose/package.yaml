@@ -8,6 +8,9 @@ services:
     networks:
       - gateway
 
+    volumes:
+      - "packages:/etc/packages"
+
     deploy:
       labels:
         traefik.docker.network: "proxy_gateway"
@@ -23,6 +26,11 @@ services:
       restart_policy:
         condition: any
         window: 30s
+
+volumes:
+  packages:
+    external:
+      name: packages
 
 networks:
   gateway:
