@@ -1,4 +1,4 @@
-FROM brianhicks/elm-base:0.18.0 as build
+FROM brianhicks/elm-dev:0.18.0 as build
 
 ARG VERSION=0.18
 ARG SITE_VERSION=$VERSION.0
@@ -29,5 +29,7 @@ COPY --from=build /src/Elm-Platform/$VERSION/package.elm-lang.org/assets /app/as
 COPY --from=build /src/Elm-Platform/$VERSION/package.elm-lang.org/dist/build/run-server/run-server /bin/run-server
 COPY --from=build /src/Elm-Platform/$VERSION/.cabal-sandbox/bin/elm-make /bin/elm-make
 
-CMD ["run-server", "-p", "8000"]
+VOLUME /etc/packages
+COPY entrypoint.sh .
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
 EXPOSE 8000
