@@ -15,7 +15,7 @@ services:
 
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock"
-      - "acme:/etc/traefik"
+      - "certs:/mnt/certs"
 
     networks:
       - gateway
@@ -34,7 +34,9 @@ services:
           - "node.role == manager"
 
 volumes:
-  acme: # TODO: rex-ray! https://rexray.readthedocs.io/en/stable/user-guide/docker-plugins/#digitalocean
+  certs:
+    external:
+      name: certs
 
 networks:
   gateway:
