@@ -29,7 +29,7 @@ COPY --from=build /src/Elm-Platform/$VERSION/package.elm-lang.org/assets /app/as
 COPY --from=build /src/Elm-Platform/$VERSION/package.elm-lang.org/dist/build/run-server/run-server /bin/run-server
 COPY --from=build /src/Elm-Platform/$VERSION/.cabal-sandbox/bin/elm-make /bin/elm-make
 
-VOLUME /etc/packages
+VOLUME /mnt/packages
 COPY entrypoint.sh .
 ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
 EXPOSE 8000

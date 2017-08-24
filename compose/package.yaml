@@ -9,7 +9,7 @@ services:
       - gateway
 
     volumes:
-      - "packages:/etc/packages"
+      - "packages:/mnt/packages"
 
     deploy:
       labels:
