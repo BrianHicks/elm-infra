@@ -21,6 +21,15 @@ resource "digitalocean_droplet" "elm-manager" {
   tags               = ["${var.tag}"]
   private_networking = true
 
+  lifecycle {
+    ignore_changes = [
+      # we're managing volume attachments with REX-Ray, and if we let Terraform
+      # manage them it'll detach volumes willy nilly every time we apply. We
+      # have a little more nuance than that, so we need to ignore it here.
+      "volume_ids",
+    ]
+  }
+
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
