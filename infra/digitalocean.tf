@@ -1,3 +1,9 @@
+variable "rexray_token" {}
+
+variable "region" {
+  default = "nyc1"
+}
+
 provider "digitalocean" {}
 
 resource "digitalocean_ssh_key" "local" {
@@ -5,29 +11,7 @@ resource "digitalocean_ssh_key" "local" {
   public_key = "${file("id_rsa.pub")}"
 }
 
-data "digitalocean_image" "elm-infra-base" {
-  name = "elm-infra-base"
-}
-
-resource "digitalocean_droplet" "elm-manager" {
-  image              = "${data.digitalocean_image.elm-infra-base.image}"
-  name               = "elm-manager"
-  region             = "nyc1"
-  size               = "1gb"
-  ssh_keys           = ["${digitalocean_ssh_key.local.id}"]
-  tags               = ["${digitalocean_tag.elm-manager.id}"]
-  private_networking = true
-
-  provisioner "remote-exec" {
-    connection {
-      type = "ssh"
-      user = "root"
-      private_key = "${file("id_rsa")}"
-    }
-
-    inline = ["docker swarm init --advertise-addr=${digitalocean_droplet.elm-manager.ipv4_address_private} --listen-addr=${digitalocean_droplet.elm-manager.ipv4_address_private}:2377 --autolock"]
-  }
-}
+/* MANAGERS */
 
 resource "digitalocean_tag" "elm-manager" {
   # including this to future-proof. If we ever have followers, we should add a
@@ -35,15 +19,26 @@ resource "digitalocean_tag" "elm-manager" {
   name = "elm-manager"
 }
 
-resource "digitalocean_firewall" "elm-manager" {
-  name        = "elm-manager"
-  droplet_ids = ["${digitalocean_droplet.elm-manager.id}"]
+module "manager-0-20170824" {
+  source       = "manager"
+  image_name   = "elm-infra-base_20170821"
+  name         = "elm-manager-20170824"
+  tag          = "${digitalocean_tag.elm-manager.name}"
+  key_id       = "${digitalocean_ssh_key.local.id}"
+  region       = "${var.region}"
+  rexray_token = "${var.rexray_token}"
+}
 
+resource "digitalocean_firewall" "elm-manager" {
+  name = "elm-manager"
+  tags = ["${digitalocean_tag.elm-manager.name}"]
+
+  # these are in a wacky order because the DigitalOcean API considers these a
+  # set and returns them in whatever order it likes. Terraform, on the other
+  # hand, assumes that they're as specified by the last run. So we just need to
+  # set our source order to the same implementation order of the API so we don't
+  # get weird diffs.
   inbound_rule = [
-    {
-      # ping
-      protocol = "icmp"
-    },
     {
       # SSH
       protocol   = "tcp"
@@ -61,7 +56,12 @@ resource "digitalocean_firewall" "elm-manager" {
       protocol   = "tcp"
       port_range = "443"
     },
+    {
+      # ping
+      protocol = "icmp"
+    },
   ]
+
   outbound_rule = [
     {
       protocol = "icmp"
@@ -75,8 +75,4 @@ resource "digitalocean_firewall" "elm-manager" {
       port_range = "all"
     },
   ]
-}
-
-output "address" {
-  value = "${digitalocean_droplet.elm-manager.ipv4_address}"
 }
