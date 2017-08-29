@@ -2,7 +2,7 @@
 version: '3'
 
 services:
-  www:
+  main:
     image: "brianhicks/elm-lang.org:0.18.0"
 
     networks:
@@ -12,7 +12,7 @@ services:
       labels:
         traefik.docker.network: "proxy_gateway"
         traefik.enable: "true"
-        traefik.frontend.rule: "Host:www.elm-lang.org"
+        traefik.frontend.rule: "Host:elm-lang.org"
         traefik.port: 8000
 
       replicas: 2
@@ -24,9 +24,9 @@ services:
         condition: any
         window: 30s
 
-  # redirect bare domain to www
-  bare:
-    image: "brianhicks/redirect-to-www:1.0.0"
+  # redirect www to bare domain
+  strip-www:
+    image: "brianhicks/strip-www:1.0.0"
 
     networks:
       - gateway
@@ -35,7 +35,7 @@ services:
       labels:
         traefik.docker.network: "proxy_gateway"
         traefik.enable: "true"
-        traefik.frontend.rule: "Host:elm-lang.org"
+        traefik.frontend.rule: "Host:www.elm-lang.org"
         traefik.port: 80
 
       replicas: 1
