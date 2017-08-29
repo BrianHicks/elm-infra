@@ -16,7 +16,8 @@
         "scripts": [
             "packer/base.sh",
             "packer/docker.sh",
-            "packer/monitoring.sh"
+            "packer/monitoring.sh",
+            "packer/unattended-upgrades.sh"
         ]
     }]
 }
