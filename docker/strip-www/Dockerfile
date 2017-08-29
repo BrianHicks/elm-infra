@@ -11,5 +11,7 @@ RUN echo 'daemon off;' >> /etc/nginx/nginx.conf
 RUN echo 'pid /tmp/nginx.pid;' >> /etc/nginx/nginx.conf
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY entrypoint.sh /entrypoint.sh
 
-CMD nginx
+ENV HOST=elm-lang.org
+CMD /entrypoint.sh
