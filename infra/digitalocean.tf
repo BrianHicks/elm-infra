@@ -74,16 +74,16 @@ resource "digitalocean_firewall" "elm-manager" {
 
   outbound_rule = [
     {
-      protocol              = "udp"
-      port_range            = "all"
-      destination_addresses = ["0.0.0.0/0", "::/0"]
-    },
-    {
       protocol              = "icmp"
       destination_addresses = ["0.0.0.0/0", "::/0"]
     },
     {
       protocol              = "tcp"
+      port_range            = "all"
+      destination_addresses = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol              = "udp"
       port_range            = "all"
       destination_addresses = ["0.0.0.0/0", "::/0"]
     },
