@@ -41,3 +41,7 @@ Make sure you have your S3 keys set in the environment to pull down the state.
 Then run `terraform plan infra` to see changes, and `terraform apply infra` to apply them.
 The integration with swarm is not great right now since you can't seed the swarm token.
 So if you're going to scale up, scale the managers first and then copy the swarm token into a variable somewhere and use it to bootstrap the workers.
+
+## Playbooks
+
+See playbooks under `playbooks/` for doing common operations.
