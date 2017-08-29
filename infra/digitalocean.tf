@@ -64,6 +64,12 @@ resource "digitalocean_firewall" "elm-manager" {
       protocol         = "icmp"
       source_addresses = ["0.0.0.0/0", "::/0"]
     },
+    {
+      # docker
+      protocol    = "tcp"
+      port_range  = "all"
+      source_tags = ["${digitalocean_tag.elm-manager.name}"]
+    },
   ]
 
   outbound_rule = [
