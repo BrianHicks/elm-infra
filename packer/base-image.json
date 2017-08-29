@@ -9,7 +9,7 @@
         "region": "nyc1",
         "size": "512mb",
         "ssh_username": "root",
-        "snapshot_name": "elm-infra-base"
+        "snapshot_name": "elm-infra-base_20170828"
     }],
     "provisioners": [{
         "type": "shell",

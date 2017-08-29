@@ -12,7 +12,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(
 apt-get update
 
 ## install Docker community edition
-apt-get install --yes docker-ce=17.06.0~ce-0~ubuntu
+apt-get install --yes docker-ce=17.06.1~ce-0~ubuntu
 
 ## test installation
 docker run --rm hello-world
