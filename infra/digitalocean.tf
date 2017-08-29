@@ -38,6 +38,8 @@ resource "digitalocean_firewall" "elm-manager" {
   # hand, assumes that they're as specified by the last run. So we just need to
   # set our source order to the same implementation order of the API so we don't
   # get weird diffs.
+  #
+  # TODO: follow https://github.com/terraform-providers/terraform-provider-digitalocean/issues/30 and upgrade when it's fixed.
   inbound_rule = [
     {
       # SSH
