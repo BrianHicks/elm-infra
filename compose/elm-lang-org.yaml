@@ -15,7 +15,7 @@ services:
         traefik.frontend.rule: "Host:elm-lang.org"
         traefik.port: 8000
 
-      replicas: 2
+      replicas: 1
 
       update_config:
         delay: 30s
