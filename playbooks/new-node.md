@@ -5,6 +5,7 @@
 You're going to want to join the new node to the Swarm cluster.
 
 1. On an existing node, run `docker swarm join-token manager` (we don't do workers yet) to get the invocation to join the cluster.
+   Add `--advertise-addr` and `--listen-addr` to these options (see why below.)
 2. Add and customize a new manager block to `infra/digitalocean.tf`
 3. Run `terraform get infra` from the root of the project to initialize the module for the new manager.
 4. Run `terraform plan infra` to make sure you're only going to make the changes you intend to.
