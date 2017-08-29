@@ -19,10 +19,10 @@ resource "digitalocean_tag" "elm-manager" {
   name = "elm-manager"
 }
 
-module "manager-0-20170824" {
+module "manager-0-20170828" {
   source       = "manager"
-  image_name   = "elm-infra-base_20170821"
-  name         = "elm-manager-20170824"
+  image_name   = "elm-infra-base_20170828"
+  name         = "manager-0-20170828"
   tag          = "${digitalocean_tag.elm-manager.name}"
   key_id       = "${digitalocean_ssh_key.local.id}"
   region       = "${var.region}"
