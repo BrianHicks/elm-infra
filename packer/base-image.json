@@ -17,7 +17,8 @@
             "packer/base.sh",
             "packer/docker.sh",
             "packer/monitoring.sh",
-            "packer/unattended-upgrades.sh"
+            "packer/unattended-upgrades.sh",
+            "packer/fail2ban.sh"
         ]
     }]
 }
