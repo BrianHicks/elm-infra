@@ -18,7 +18,8 @@
             "packer/docker.sh",
             "packer/monitoring.sh",
             "packer/unattended-upgrades.sh",
-            "packer/fail2ban.sh"
+            "packer/fail2ban.sh",
+            "packer/rexray.sh"
         ]
     }]
 }
