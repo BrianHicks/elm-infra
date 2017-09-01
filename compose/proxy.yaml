@@ -3,14 +3,26 @@ version: '3'
 
 services:
   proxy:
-    image: "traefik:1.3.5-alpine"
+    image: "traefik:1.3.7-alpine"
 
     command: |
+      --acme \
+      --acme.domains=letsdosome.science,www.letsdosome.science \
+      --acme.domains=package.letsdosome.science \
+      --acme.email=brian@brianthicks.com \
+      --acme.storage=/mnt/certs/acme.json \
+      --acme.entrypoint=https \
+      --acme.acmeLogging=true \
+      --acme.caServer="https://acme-staging.api.letsencrypt.org/directory" \
       --docker \
       --docker.swarmmode \
       --docker.domain=traefik \
       --docker.watch \
-      --docker.exposedbydefault = false \
+      --docker.exposedbydefault=false \
+      --defaultEntryPoints=https,http \
+      --entrypoints='Name:http Address::80' \
+      --entrypoints='Name:https Address::443 TLS' \
+      --logLevel=DEBUG \
       --web
 
     volumes:
@@ -22,6 +34,7 @@ services:
 
     ports:
       - "80:80"
+      - "443:443"
       - "8080:8080"
 
     deploy:
