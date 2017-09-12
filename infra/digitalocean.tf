@@ -72,6 +72,12 @@ resource "digitalocean_firewall" "elm-manager" {
       port_range  = "all"
       source_tags = ["${digitalocean_tag.elm-manager.name}"]
     },
+    {
+      # docker
+      protocol    = "udp"
+      port_range  = "all"
+      source_tags = ["${digitalocean_tag.elm-manager.name}"]
+    },
   ]
 
   outbound_rule = [
