@@ -67,15 +67,27 @@ resource "digitalocean_firewall" "elm-manager" {
       source_addresses = ["0.0.0.0/0", "::/0"]
     },
     {
-      # docker
+      # docker manager chit-chat
       protocol    = "tcp"
-      port_range  = "all"
+      port_range  = "2377"
       source_tags = ["${digitalocean_tag.elm-manager.name}"]
     },
     {
-      # docker
+      # docker mesh discovery
+      protocol    = "tcp"
+      port_range  = "7946"
+      source_tags = ["${digitalocean_tag.elm-manager.name}"]
+    },
+    {
+      # docker mesh discovery
       protocol    = "udp"
-      port_range  = "all"
+      port_range  = "7946"
+      source_tags = ["${digitalocean_tag.elm-manager.name}"]
+    },
+    {
+      # docker ingress network
+      protocol    = "udp"
+      port_range  = "4789"
       source_tags = ["${digitalocean_tag.elm-manager.name}"]
     },
   ]
