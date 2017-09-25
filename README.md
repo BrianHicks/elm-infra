@@ -4,6 +4,15 @@ Running Elm's websites in Docker so we can compose them a little bit better for 
 
 ## Docker Images
 
+Docker ([docker.com](https://www.docker.com/)) is basically the backbone of this project.
+It lets you create (semi-) reproducible builds and ship those built artifacts around.
+It also does process management both locally and distributed (we use swarm-mode.)
+In our configuration, it also does [layer 4 (TCP) load balancing](https://www.nginx.com/resources/glossary/layer-4-load-balancing/)
+We use [Traefik](https://traefik.io/) to do [layer 7 (HTTP) load balancing](https://www.nginx.com/resources/glossary/layer-7-load-balancing/) and routing.
+
+Docker containers run images, and images are built with `Dockerfile`s.
+Those live in `docker` at the following locations:
+
 ### `elm-dev`
 
 This contains the Elm platform in Docker. Mostly using [this guide](https://github.com/elm-lang/elm-platform/blob/master/README.md).
@@ -21,6 +30,10 @@ For now, we're going to pretend it's stateless and add statefulness as needed.
 
 ## Packer
 
+Packer: [packer.io](http://packer.io/).
+It creates VM images in whatever cloud you like so that you can spin up instances super quickly.
+We use it to bake in OS updates and our configuration so we can launch and replace individual hosts without too much bother or wait for provisioning.
+
 To get started, go grab a DigitalOcean account and API key, and set it in an environment variable:
 
 ```shell
@@ -34,6 +47,11 @@ If that runs successfully, you can run `packer build packer/base-image.json`.
 This will create a base infrastructure node from which to create VMs.
 
 ## Terraform
+
+Terraform: [terraform.io](https://www.terraform.io/).
+It creates and coordiantes cloud infrastructure (firewalls, VMs, etc.)
+It can also manage DNS, but we do this by hand.
+The main benefit here is that we can see diffs of what's running vs what should be running.
 
 Run `terraform init infra`.
 Make sure you have your S3 keys set in the environment to pull down the state.
