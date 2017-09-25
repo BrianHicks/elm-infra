@@ -28,6 +28,11 @@ There is a major caveat here: the current (0.18) implementation of the package s
 This is a problem scaling up, and we'll see if that changes in the future.
 For now, we're going to pretend it's stateless and add statefulness as needed.
 
+### `strip-www`
+
+Take www.somehost.com and turn it into somehost.com with a permanent (301) redirect with Nginx.
+It relies on a layer 7 proxy/routing layer to work correctly (specifically, only traffic to www.somehost.com should reach it.)
+
 ## Packer
 
 Packer: [packer.io](http://packer.io/).
