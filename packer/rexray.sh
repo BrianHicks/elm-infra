@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# TODO: evaluate and/or remove
 set -euo pipefail
 
 # install rexray
