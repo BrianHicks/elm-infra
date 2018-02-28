@@ -16,6 +16,7 @@
         "scripts": [
             "packer/base.sh",
             "packer/docker.sh",
+            "packer/kubeadm.sh",
             "packer/monitoring.sh",
             "packer/unattended-upgrades.sh",
             "packer/fail2ban.sh"
