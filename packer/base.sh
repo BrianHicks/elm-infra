@@ -8,3 +8,4 @@ apt-get update
 apt-get install --yes apt-transport-https ca-certificates curl software-properties-common htop
 
 apt-get upgrade --yes --quiet
+apt-get autoremove --yes
