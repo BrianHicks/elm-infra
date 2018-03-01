@@ -4,6 +4,7 @@ variable "region" {
   default = "nyc1"
 }
 
+variable "base_image" {}
 variable "digitalocean_token" {}
 
 provider "digitalocean" {
@@ -15,15 +16,14 @@ resource "digitalocean_ssh_key" "local" {
   public_key = "${file("id_rsa.pub")}"
 }
 
-/* MANAGERS */
+/* LEADERS */
 
+module "leader" {
+  source = "leader"
 
-# module "manager-1-20170828-1" {
-#   source       = "manager"
-#   image_name   = "elm-infra-base_20170828-1"
-#   name         = "manager-1-20170828-1"
-#   tag          = "${digitalocean_tag.elm-manager.name}"
-#   key_id       = "${digitalocean_ssh_key.local.id}"
-#   region       = "${var.region}"
-#   rexray_token = "${var.rexray_token}"
-# }
+  name   = "elm-leader"
+  image  = "${var.base_image}"
+  tag    = "${digitalocean_tag.elm-leader.name}"
+  key_id = "${digitalocean_ssh_key.local.id}"
+  region = "${var.region}"
+}
