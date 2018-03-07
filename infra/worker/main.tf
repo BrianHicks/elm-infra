@@ -16,13 +16,12 @@ data "digitalocean_image" "elm-infra-base" {
 resource "digitalocean_droplet" "worker" {
   count = "${var.count}"
 
-  image              = "${data.digitalocean_image.elm-infra-base.image}"
-  name               = "${var.name_prefix}-${count.index}"
-  region             = "${var.region}"
-  size               = "1gb"
-  ssh_keys           = ["${var.key_id}"]
-  tags               = ["${var.tag}"]
-  private_networking = true
+  image    = "${data.digitalocean_image.elm-infra-base.image}"
+  name     = "${var.name_prefix}-${count.index}"
+  region   = "${var.region}"
+  size     = "1gb"
+  ssh_keys = ["${var.key_id}"]
+  tags     = ["${var.tag}"]
 
   lifecycle {
     ignore_changes = [

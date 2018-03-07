@@ -10,13 +10,12 @@ data "digitalocean_image" "elm-infra-base" {
 }
 
 resource "digitalocean_droplet" "leader" {
-  image              = "${data.digitalocean_image.elm-infra-base.image}"
-  name               = "${var.name}"
-  region             = "${var.region}"
-  size               = "1gb"
-  ssh_keys           = ["${var.key_id}"]
-  tags               = ["${var.tag}"]
-  private_networking = true
+  image    = "${data.digitalocean_image.elm-infra-base.image}"
+  name     = "${var.name}"
+  region   = "${var.region}"
+  size     = "1gb"
+  ssh_keys = ["${var.key_id}"]
+  tags     = ["${var.tag}"]
 
   lifecycle {
     ignore_changes = [
@@ -36,10 +35,11 @@ resource "digitalocean_droplet" "leader" {
     }
 
     inline = [
-      "kubeadm init --apiserver-advertise-address=${digitalocean_droplet.leader.ipv4_address_private} --node-name=${var.name}",
+      "kubeadm init --apiserver-advertise-address=${digitalocean_droplet.leader.ipv4_address} --node-name=${var.name}",
 
       # enable admin access for the login user
       "mkdir -p $HOME/.kube",
+
       "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
       "chown $(id -u):$(id -g) $HOME/.kube/config",
 
@@ -51,8 +51,4 @@ resource "digitalocean_droplet" "leader" {
 
 output "ipv4_address" {
   value = "${digitalocean_droplet.leader.ipv4_address}"
-}
-
-output "private_ipv4_address" {
-  value = "${digitalocean_droplet.leader.ipv4_address_private}"
 }
