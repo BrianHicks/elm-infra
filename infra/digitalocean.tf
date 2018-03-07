@@ -32,8 +32,9 @@ module "leader" {
 }
 
 module "worker-alpha" {
+  count = 1
   source      = "worker"
-  name        = "elm-worker-alpha"
+  name_prefix = "elm-worker"
   image       = "${var.base_image}"
   tag         = "${digitalocean_tag.elm-worker.name}"
   key_id      = "${digitalocean_ssh_key.local.id}"
