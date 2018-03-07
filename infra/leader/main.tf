@@ -1,5 +1,6 @@
 variable "image" {}
 variable "key_id" {}
+variable "private_key" {}
 variable "name" {}
 variable "tag" {}
 variable "region" {}
@@ -31,11 +32,19 @@ resource "digitalocean_droplet" "leader" {
     connection {
       type        = "ssh"
       user        = "root"
-      private_key = "${file("id_rsa")}"
+      private_key = "${file(var.private_key)}"
     }
 
     inline = [
-      "echo pub:${digitalocean_droplet.leader.ipv4_address} priv:${digitalocean_droplet.leader.ipv4_address_private}",
+      "kubeadm init --apiserver-advertise-address=${digitalocean_droplet.leader.ipv4_address_private} --node-name=${var.name}",
+
+      # enable admin access for the login user
+      "mkdir -p $HOME/.kube",
+      "cp -i /etc/kubernetes/admin.conf $HOME/.kube/config",
+      "chown $(id -u):$(id -g) $HOME/.kube/config",
+
+      # install the Weave plugin
+      "kubectl apply -f \"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')\"",
     ]
   }
 }
