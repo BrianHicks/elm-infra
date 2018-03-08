@@ -1,0 +1,3 @@
+[submodule "workload/charts"]
+	path = workload/charts
+	url = https://github.com/kubernetes/charts
