@@ -19,7 +19,7 @@ resource "digitalocean_droplet" "worker" {
   image    = "${data.digitalocean_image.elm-infra-base.image}"
   name     = "${var.name_prefix}-${count.index}"
   region   = "${var.region}"
-  size     = "1gb"
+  size     = "s-1vcpu-1gb"
   ssh_keys = ["${var.key_id}"]
   tags     = ["${var.tag}"]
 

@@ -13,7 +13,7 @@ resource "digitalocean_droplet" "leader" {
   image    = "${data.digitalocean_image.elm-infra-base.image}"
   name     = "${var.name}"
   region   = "${var.region}"
-  size     = "1gb"
+  size     = "s-1vcpu-1gb"
   ssh_keys = ["${var.key_id}"]
   tags     = ["${var.tag}"]
 
