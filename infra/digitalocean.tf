@@ -32,8 +32,9 @@ module "leader" {
 }
 
 module "worker-alpha" {
-  count = 1
-  source      = "worker"
+  source = "worker"
+
+  count       = 2
   name_prefix = "elm-worker"
   image       = "${var.base_image}"
   tag         = "${digitalocean_tag.elm-worker.name}"
