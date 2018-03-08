@@ -1,0 +1,102 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: website
+  labels:
+    app: elm-lang.org
+    role: website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elm-lang.org
+      role: website
+  template:
+    metadata:
+      labels:
+        app: elm-lang.org
+        role: website
+    spec:
+      containers:
+        - name: website
+          image: brianhicks/elm-lang.org:0.18.0
+          ports:
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: website
+spec:
+  selector:
+    app: elm-lang.org
+    role: website
+  ports:
+    - name: http
+      targetPort: 8000
+      port: 80
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: strip-www
+  labels:
+    app: elm-lang.org
+    role: strip-www
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elm-lang.org
+      role: strip-www
+  template:
+    metadata:
+      labels:
+        app: elm-lang.org
+        role: strip-www
+    spec:
+      containers:
+        - name: website
+          image: brianhicks/strip-www:1.0.0
+          env:
+            - name: HOST
+              value: letsdosome.science
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: strip-www
+spec:
+  selector:
+    app: elm-lang.org
+    role: strip-www
+  ports:
+    - name: http
+      targetPort: 80
+      port: 80
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: website
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+    - host: letsdosome.science
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: website
+              servicePort: http
+    - host: www.letsdosome.science
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: strip-www
+              servicePort: http
