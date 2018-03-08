@@ -41,9 +41,8 @@ kind: ServiceAccount
 metadata:
   name: traefik-ingress-controller
   namespace: kube-system
-
 ---
-kind: DaemonSet
+kind: Deployment
 apiVersion: extensions/v1beta1
 metadata:
   name: traefik-ingress-controller
@@ -51,6 +50,10 @@ metadata:
   labels:
     k8s-app: traefik-ingress-lb
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: traefik-ingress-lb
   template:
     metadata:
       labels:
@@ -59,23 +62,12 @@ spec:
     spec:
       serviceAccountName: traefik-ingress-controller
       terminationGracePeriodSeconds: 60
-      hostNetwork: true
       containers:
       - image: traefik
         name: traefik-ingress-lb
-        ports:
-        - name: http
-          containerPort: 80
-          hostPort: 80
-        - name: admin
-          containerPort: 8080
-        securityContext:
-          privileged: true
         args:
-        - -d
         - --api
         - --kubernetes
-
 ---
 kind: Service
 apiVersion: v1
