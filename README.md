@@ -10,6 +10,10 @@ Hooray!
 
 Next time you start the project, run `pipenv shell` in the directory, and that's it.
 
+## Glossary
+
+- `iac`: Infrastructure as Code. Terraform, mostly. This may inclue Packer someday too.
+
 ## License
 
 Licensed under the please don't use this yet it's not ready license.
