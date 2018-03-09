@@ -42,7 +42,48 @@ metadata:
   name: traefik-ingress-controller
   namespace: kube-system
 ---
+# TODO: this should be HA or traefik should be updated to use k8s secrets, once
+# available.
+apiVersion: extensions/v1beta1
 kind: Deployment
+metadata:
+  name: traefik-etcd
+  namespace: kube-system
+  labels:
+    k8s-app: traefik-ingress-etcd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: traefik-ingress-etcd
+  template:
+    metadata:
+      labels:
+        k8s-app: traefik-ingress-etcd
+    spec:
+      containers:
+        - name: etcd
+          image: quay.io/coreos/etcd:v3.2
+          # TODO: some kind of persistent storage
+          ports:
+            - name: client
+              containerPort: 2379
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: traefik-etcd
+  namespace: kube-system
+spec:
+  selector:
+    k8s-app: traefik-ingress-etcd
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 2379
+      name: client
+---
+kind: DaemonSet
 apiVersion: extensions/v1beta1
 metadata:
   name: traefik-ingress-controller
@@ -50,10 +91,6 @@ metadata:
   labels:
     k8s-app: traefik-ingress-lb
 spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      k8s-app: traefik-ingress-lb
   template:
     metadata:
       labels:
@@ -62,12 +99,24 @@ spec:
     spec:
       serviceAccountName: traefik-ingress-controller
       terminationGracePeriodSeconds: 60
+      hostNetwork: true
       containers:
-      - image: traefik
+      - image: traefik:v1.5.3
         name: traefik-ingress-lb
+        ports:
+        - name: http
+          containerPort: 80
+          hostPort: 80
+        - name: admin
+          containerPort: 8080
+        securityContext:
+          privileged: true
         args:
+        - -d
         - --api
         - --kubernetes
+        - --etcd
+        - --etcd.endpoint=traefik-etcd.kube-system:2379
 ---
 kind: Service
 apiVersion: v1
