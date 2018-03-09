@@ -1,0 +1,6 @@
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: install python
+      raw: test -e /usr/bin/python || (apt-get -y update && apt-get install -y python-minimal)
