@@ -1,0 +1,17 @@
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: install unattended-upgrades
+      package:
+        name: unattended-upgrades
+        state: latest
+
+    - name: set up unattended upgrades
+      copy:
+        dest: /etc/apt/apt.conf.d/20auto-upgrades
+        content: |
+          APT::Periodic::Update-Package-Lists "1";
+          APT::Periodic::Download-Upgradeable-Packages "1";
+          APT::Periodic::AutocleanInterval "7";
+          APT::Periodic::Unattended-Upgrade "1";

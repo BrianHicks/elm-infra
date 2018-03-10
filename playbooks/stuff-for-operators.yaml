@@ -1,0 +1,13 @@
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: install nice things for operating the system
+      package:
+        name: "{{ item }}"
+        state: latest
+      with_items:
+        - curl
+        - htop
+        - jq
+        - unzip
