@@ -1,0 +1,3 @@
+[submodule "vendor/mitogen"]
+	path = vendor/mitogen
+	url = https://github.com/dw/mitogen
