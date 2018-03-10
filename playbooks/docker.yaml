@@ -1,0 +1,16 @@
+- hosts: all
+
+  tasks:
+    - name: add Docker public key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        id: 0EBFCD88
+
+    - name: add Docker repo
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ansible_lsb.codename}} stable
+
+    - name: install Docker
+      package:
+        name: docker-ce
+        state: present
