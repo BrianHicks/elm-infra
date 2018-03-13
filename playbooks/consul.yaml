@@ -59,10 +59,15 @@
       notify:
         - restart consul
 
+    - name: enable and start
+      systemd:
+        name: consul
+        state: started
+        enabled: true
+
   handlers:
     - name: restart consul
       systemd:
         name: consul
         state: restarted
-        enabled: true
         daemon_reload: true
