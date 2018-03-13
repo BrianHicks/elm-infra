@@ -1,6 +1,5 @@
 - hosts: all
   gather_facts: false
-  strategy: free # since we can't use mitogen until Python is installed
 
   tasks:
     - name: install python
