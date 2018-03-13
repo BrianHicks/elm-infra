@@ -1,0 +1,59 @@
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: install weave
+      get_url:
+        url: https://github.com/weaveworks/weave/releases/download/v2.2.1/weave
+        checksum: sha256:09fbe6e91c82e1554873981808586e1e1648edde9979e7363324ac99e246b3ce
+        dest: /usr/local/bin/weave
+        mode: 0755
+
+    - name: configuration directory
+      file:
+        dest: /etc/weave
+        state: directory
+
+    - name: peers
+      tags: [runtime]
+      copy:
+        dest: /etc/weave/env
+        content: |
+          PEERS="{{ groups.all | map("extract", hostvars, "ipv4_address_private") | join(" ") }}"
+      notify:
+        - restart weave
+
+    - name: systemd unit
+      copy:
+        dest: /etc/systemd/system/weave.service
+        content: |
+          [Unit]
+          Description=Weave Network
+          Documentation=http://docs.weave.works/weave/latest_release/
+          Requires=docker.service
+          After=docker.service
+
+          [Service]
+          EnvironmentFile=-/etc/weave/env
+          ExecStartPre=/usr/local/bin/weave launch --no-restart $PEERS
+          ExecStart=/usr/bin/docker attach weave
+          ExecStop=/usr/local/bin/weave stop
+
+          [Install]
+          WantedBy=multi-user.target
+      notify:
+        - restart weave
+
+    - name: enable and start
+      tags: [runtime]
+      systemd:
+        name: weave
+        state: started
+        enabled: true
+
+  handlers:
+    - name: restart weave
+      systemd:
+        name: weave
+        state: restarted
+        daemon_reload: true
