@@ -60,6 +60,7 @@
         - restart consul
 
     - name: enable and start
+      tags: [runtime]
       systemd:
         name: consul
         state: started
