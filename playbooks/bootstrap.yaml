@@ -4,3 +4,4 @@
 - import_playbook: fail2ban.yaml
 - import_playbook: docker.yaml
 - import_playbook: consul.yaml
+- import_playbook: nomad.yaml

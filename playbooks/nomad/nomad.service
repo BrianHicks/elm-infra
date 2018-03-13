@@ -1,0 +1,14 @@
+Description=Nomad scheduler
+Requires=network-online.target
+After=network.target
+
+[Service]
+Restart=on-failure
+ExecStartPre=/etc/nomad/write-config.sh
+ExecStart=/usr/local/bin/nomad agent -config=/etc/nomad/config.hcl
+ExecReload=/bin/kill -s HUP \$MAINPID
+KillSignal=SIGINT
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target

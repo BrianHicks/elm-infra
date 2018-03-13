@@ -1,0 +1,41 @@
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: install binary
+      unarchive:
+        remote_src: true
+        src: https://releases.hashicorp.com/nomad/0.7.1/nomad_0.7.1_linux_amd64.zip
+        dest: /usr/local/bin
+        creates: /usr/local/bin/nomad
+
+    - name: directories
+      file:
+        path: "{{ item }}"
+        state: directory
+      with_items:
+        - /etc/nomad
+        - /opt/nomad/data
+
+    - name: dynamic configuration script
+      template:
+        src: nomad/write-config.sh
+        dest: /etc/nomad/write-config.sh
+        mode: 0744
+      notify:
+        - restart nomad
+
+    - name: systemd unit
+      copy:
+        src: nomad/nomad.service
+        dest: /etc/systemd/system/nomad.service
+      notify:
+        - restart nomad
+
+  handlers:
+    - name: restart nomad
+      systemd:
+        name: nomad
+        state: restarted
+        enabled: true
+        daemon_reload: true
