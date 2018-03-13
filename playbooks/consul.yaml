@@ -40,19 +40,24 @@
       notify:
         - restart consul
 
+    - name: nodes to retry joining
+      tags: [runtime]
+      copy:
+        dest: /etc/consul/retry-join.json
+        owner: consul
+        group: consul
+        mode: 0644
+        content: |
+          {"retry_join": {{groups.leader | map("extract", hostvars, "ipv4_address_private") | list | to_json }}}
+      notify:
+        - restart consul
+
     - name: systemd unit
       copy:
         src: consul/consul.service
         dest: /etc/systemd/system/consul.service
       notify:
         - restart consul
-
-    - name: make sure services are fresh before joining cluster
-      meta: flush_handlers
-
-    - name: join cluster
-      tags: [runtime]
-      command: "consul join{% for host in groups.all %} {{ hostvars[host].ipv4_address_private }}{% endfor %}"
 
   handlers:
     - name: restart consul
