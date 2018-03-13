@@ -51,6 +51,7 @@
       meta: flush_handlers
 
     - name: join cluster
+      tags: [runtime]
       command: "consul join{% for host in groups.all %} {{ hostvars[host].ipv4_address_private }}{% endfor %}"
 
   handlers:
