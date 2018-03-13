@@ -1,0 +1,18 @@
+[Unit]
+Description=Consul service discovery agent
+Requires=network-online.target
+After=network.target
+
+[Service]
+User=consul
+Group=consul
+Restart=on-failure
+ExecStartPre=/etc/consul/write-config.sh
+ExecStartPre=/usr/local/bin/consul validate /etc/consul
+ExecStart=/usr/local/bin/consul agent -config-dir=/etc/consul
+ExecReload=/bin/kill -s HUP \$MAINPID
+KillSignal=SIGINT
+TimeoutStopSec=5
+
+[Install]
+WantedBy=multi-user.target

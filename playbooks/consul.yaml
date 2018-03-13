@@ -1,0 +1,62 @@
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - name: install binary
+      unarchive:
+        remote_src: true
+        src: https://releases.hashicorp.com/consul/1.0.6/consul_1.0.6_linux_amd64.zip
+        dest: /usr/local/bin
+        creates: /usr/local/bin/consul
+
+    - name: group
+      group:
+        name: consul
+
+    - name: user
+      user:
+        name: consul
+        group: consul
+        createhome: false
+        shell: /bin/nologin
+
+    - name: directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        group: consul
+        owner: consul
+      with_items:
+        - /etc/consul
+        - /opt/consul/data
+
+    - name: dynamic configuration script
+      template:
+        src: consul/write-config.sh
+        dest: /etc/consul/write-config.sh
+        mode: 0744
+        owner: consul
+        group: consul
+      notify:
+        - restart consul
+
+    - name: systemd unit
+      copy:
+        src: consul/consul.service
+        dest: /etc/systemd/system/consul.service
+      notify:
+        - restart consul
+
+    - name: make sure services are fresh before joining cluster
+      meta: flush_handlers
+
+    - name: join cluster
+      command: "consul join{% for host in groups.all %} {{ hostvars[host].private_ipv4 }}{% endfor %}"
+
+  handlers:
+    - name: restart consul
+      systemd:
+        name: consul
+        state: restarted
+        enabled: true
+        daemon_reload: true
