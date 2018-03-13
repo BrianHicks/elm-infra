@@ -15,7 +15,7 @@ advertise {
 
 server {
   enabled          = true
-  bootstrap_expect = {{ groups.all | length }}
+  bootstrap_expect = {{ groups.leader | length }}
 }
 
 client {

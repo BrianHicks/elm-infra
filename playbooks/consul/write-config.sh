@@ -12,7 +12,7 @@ jq --arg ip "$PRIVATE_IPV4" \
   "server": true,
   "ui": false,
   "data_dir": "/opt/consul/data",
-  "bootstrap_expect": {{ groups.all | length }},
+  "bootstrap_expect": {{ groups.leader | length }},
   "service": {
     "name": "consul"
   }
