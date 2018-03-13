@@ -51,7 +51,7 @@
       meta: flush_handlers
 
     - name: join cluster
-      command: "consul join{% for host in groups.all %} {{ hostvars[host].private_ipv4 }}{% endfor %}"
+      command: "consul join{% for host in groups.all %} {{ hostvars[host].ipv4_address_private }}{% endfor %}"
 
   handlers:
     - name: restart consul
