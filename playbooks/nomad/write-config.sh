@@ -20,6 +20,10 @@ server {
 
 client {
   enabled = true
+
+  options {
+    "docker.endpoint" = "unix:///var/run/weave/weave.sock"
+  }
 }
 
 consul {
