@@ -40,7 +40,7 @@ job "ingress" {
           "--consulCatalog.exposedByDefault=false",
           "--api.entrypoint=api",
           "--api.dashboard",
-          "--entrypoints=Name:http Addres::80",
+          "--entrypoints=Name:http Address::80",
           "--entrypoints=Name:api Address::8081",
         ]
       }
