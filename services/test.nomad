@@ -24,7 +24,8 @@ job "test" {
       driver = "docker"
 
       config {
-        image = "errm/cheese:cheddar"
+        image        = "errm/cheese:cheddar"
+        network_mode = "weave"
 
         port_map {
           http = 80
