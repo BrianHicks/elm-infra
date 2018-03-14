@@ -44,11 +44,3 @@ resource "digitalocean_droplet" "leader" {
     ignore_changes = ["volume_ids"]
   }
 }
-
-output "public_ips" {
-  value = "${jsonencode(digitalocean_droplet.leader.*.ipv4_address)}"
-}
-
-output "private_ips" {
-  value = "${jsonencode(digitalocean_droplet.leader.*.ipv4_address_private)}"
-}
