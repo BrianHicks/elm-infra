@@ -44,3 +44,55 @@ resource "digitalocean_droplet" "leader" {
     ignore_changes = ["volume_ids"]
   }
 }
+
+resource "digitalocean_firewall" "web" {
+  name = "web"
+
+  droplet_ids = ["${digitalocean_droplet.leader.*.id}"]
+
+  inbound_rule = [
+    {
+      protocol         = "tcp"
+      port_range       = "22"
+      source_addresses = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol         = "tcp"
+      port_range       = "80"
+      source_addresses = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol         = "tcp"
+      port_range       = "443"
+      source_addresses = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol         = "tcp"
+      port_range       = "1-65535"
+      source_addresses = ["${digitalocean_droplet.leader.*.ipv4_address_private}"]
+    },
+    {
+      protocol         = "udp"
+      port_range       = "1-65535"
+      source_addresses = ["${digitalocean_droplet.leader.*.ipv4_address_private}"]
+    },
+  ]
+
+  outbound_rule = [
+    {
+      protocol              = "tcp"
+      port_range            = "1-65535"
+      destination_addresses = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol              = "udp"
+      port_range            = "1-65535"
+      destination_addresses = ["0.0.0.0/0", "::/0"]
+    },
+    {
+      protocol              = "icmp"
+      port_range            = "1-65535"
+      destination_addresses = ["0.0.0.0/0", "::/0"]
+    },
+  ]
+}
