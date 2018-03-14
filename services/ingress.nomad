@@ -35,8 +35,9 @@ job "ingress" {
 
         args = [
           "--logLevel=INFO",
-          "--consul",
-          "--consul.endpoint=172.17.0.1:8500",
+          "--consulCatalog",
+          "--consulCatalog.endpoint=172.17.0.1:8500",
+          "--consulCatalog.exposedByDefault=false",
           "--api.entrypoint=api",
           "--api.dashboard",
           "--entrypoints=Name:http Addres::80",

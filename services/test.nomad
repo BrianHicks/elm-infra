@@ -44,6 +44,7 @@ job "test" {
       service {
         name = "test"
         port = "http"
+
         tags = [
           "traefik.enable=true",
           "traefik.frontend.rule=Host:test.letsdosome.science",
