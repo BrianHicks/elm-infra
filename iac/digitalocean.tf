@@ -76,6 +76,16 @@ resource "digitalocean_firewall" "web" {
       port_range       = "1-65535"
       source_addresses = ["${digitalocean_droplet.leader.*.ipv4_address_private}"]
     },
+    {
+      protocol         = "tcp"
+      port_range       = "1-65535"
+      source_addresses = ["${digitalocean_droplet.leader.*.ipv4_address}"]
+    },
+    {
+      protocol         = "udp"
+      port_range       = "1-65535"
+      source_addresses = ["${digitalocean_droplet.leader.*.ipv4_address}"]
+    },
   ]
 
   outbound_rule = [
