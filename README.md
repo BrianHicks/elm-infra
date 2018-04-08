@@ -44,7 +44,7 @@ The word "server" is really overloaded in this style of infrastructure.
 There are three levels:
 
 - **Virtual Machines (VMs)** at the cloud/host level.
-  These are the things you pay DigitalOcean to give you.
+  These are the things you pay DigitalOcean for.
 
 - **Containers** inside the VMs.
   These are scheduled dynamically and contain the software that makes up the workload.
