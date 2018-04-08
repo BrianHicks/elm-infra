@@ -8,7 +8,7 @@
         - [*Terraform and Ansible* for bringing up VMs](#terraform-and-ansible-for-bringing-up-vms)
         - [*Docker* for packaging and dependency isolation](#docker-for-packaging-and-dependency-isolation)
         - [*Nomad, Consul, and Traefik* for scheduling, running, and routing traffic to containers](#nomad-consul-and-traefik-for-scheduling-running-and-routing-traffic-to-containers)
-    - [Disambiguating "server"?](#disambiguating-server)
+    - [Disambiguating "server"](#disambiguating-server)
     - [Using this Repo](#using-this-repo)
         - [Bringing up new hosts](#bringing-up-new-hosts)
         - [Deploying services](#deploying-services)
@@ -60,7 +60,7 @@ We can also see what changes the system will make in advance.
 **Long-term Benefit:** New services can be added without making any changes to the underlying infrastructure.
 Existing services can be scaled up trivially to respond to an increase in traffic.
 
-## Disambiguating "server"?
+## Disambiguating "server"
 
 The word "server" is really overloaded in this style of infrastructure.
 There are three levels:
