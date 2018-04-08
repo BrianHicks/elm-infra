@@ -5,7 +5,10 @@
 
 - [elm-infra](#elm-infra)
     - [So, What's This All About?](#so-whats-this-all-about)
-        - [Disambiguating "server"?](#disambiguating-server)
+        - [*Terraform and Ansible* for bringing up VMs](#terraform-and-ansible-for-bringing-up-vms)
+        - [*Docker* for packaging and dependency isolation](#docker-for-packaging-and-dependency-isolation)
+        - [*Nomad, Consul, and Traefik* for scheduling, running, and routing traffic to containers](#nomad-consul-and-traefik-for-scheduling-running-and-routing-traffic-to-containers)
+    - [Disambiguating "server"?](#disambiguating-server)
     - [Using this Repo](#using-this-repo)
         - [Bringing up new hosts](#bringing-up-new-hosts)
         - [Deploying services](#deploying-services)
@@ -25,36 +28,39 @@ Goals for the new infrastructure:
 
 That lead me to these technology choices:
 
-- **Terraform and Ansible** for bringing up VMs.
-  Helps with goals 1 and 2.
+### *Terraform and Ansible* for bringing up VMs
 
-  *Why?* No more SSHing into VMs to make changes or restart services by hand.
+Helps with goals 1 and 2.
 
-  *Another Benefit:* All information about servers and their configuration are backed up and can be restored easily.
+**Why?** No more SSHing into VMs to make changes or restart services by hand.
 
-- **Docker** for packaging and dependency isolation.
-  Helps with goal 1.
+**Another Benefit:** All information about servers and their configuration are backed up and can be restored easily.
 
-  *Why?* Deploys are simpler and more reliable because Docker isolates runtime dependencies.
-  Rollbacks become about as easy as deploys.
+### *Docker* for packaging and dependency isolation
 
-  *Another Benefit:* It's slightly more secure than we would be otherwise.
+Helps with goal 1.
 
-  *Long-term Benefit:* upgrading now gives us much more flexibility in the future.
-  Almost all new DevOps/infrastructure tools use Docker and/or can run Docker containers.
+**Why?** Deploys are simpler and more reliable because Docker isolates runtime dependencies.
+Rollbacks become about as easy as deploys.
 
-- **Nomad, Consul, and Traefik** for scheduling, running, and routing traffic to containers.
-  Helps with goals 1, 2, and 3.
+**Another Benefit:** It's slightly more secure than we would be otherwise.
 
-  *Why?* If a VM goes away, the things it was running will automatically move somewhere else to minimize downtime.
+**Long-term Benefit:** upgrading now gives us much more flexibility in the future.
+Almost all new DevOps/infrastructure tools use Docker and/or can run Docker containers.
 
-  *Another Benefit:* All information about running services is backed up and can be restored easily.
-  We can also see what changes the system will make in advance.
+### *Nomad, Consul, and Traefik* for scheduling, running, and routing traffic to containers
 
-  *Long-term Benefit:* New services can be added without making any changes to the underlying infrastructure.
-  Existing services can be scaled up trivially to respond to an increase in traffic.
+Helps with goals 1, 2, and 3.
 
-### Disambiguating "server"?
+**Why?** If a VM goes away, the things it was running will automatically move somewhere else to minimize downtime.
+
+**Another Benefit:** All information about running services is backed up and can be restored easily.
+We can also see what changes the system will make in advance.
+
+**Long-term Benefit:** New services can be added without making any changes to the underlying infrastructure.
+Existing services can be scaled up trivially to respond to an increase in traffic.
+
+## Disambiguating "server"?
 
 The word "server" is really overloaded in this style of infrastructure.
 There are three levels:
