@@ -26,14 +26,16 @@ Goals for the new infrastructure:
 That lead me to these technology choices:
 
 - **Terraform and Ansible** for bringing up VMs.
+  Helps with goals 1 and 2.
 
-  *Why?* No more SSHing into VMs to make changes or restart services by hand (goals 1 and 2.)
+  *Why?* No more SSHing into VMs to make changes or restart services by hand.
 
   *Another Benefit:* All information about servers and their configuration are backed up and can be restored easily.
 
 - **Docker** for packaging and dependency isolation.
+  Helps with goal 1.
 
-  *Why?* Deploys are simpler and more reliable because Docker isolates runtime dependencies (goal 1.)
+  *Why?* Deploys are simpler and more reliable because Docker isolates runtime dependencies.
   Rollbacks become about as easy as deploys.
 
   *Another Benefit:* It's slightly more secure than we would be otherwise.
@@ -42,8 +44,9 @@ That lead me to these technology choices:
   Almost all new DevOps/infrastructure tools use Docker and/or can run Docker containers.
 
 - **Nomad, Consul, and Traefik** for scheduling, running, and routing traffic to containers.
+  Helps with goals 1, 2, and 3.
 
-  *Why?* If a VM goes away, the things it was running will automatically move somewhere else to minimize downtime (goals 1, 2, and 3.)
+  *Why?* If a VM goes away, the things it was running will automatically move somewhere else to minimize downtime.
 
   *Another Benefit:* All information about running services is backed up and can be restored easily.
   We can also see what changes the system will make in advance.
