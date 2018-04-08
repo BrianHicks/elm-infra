@@ -1,5 +1,18 @@
 # elm-infra
 
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
+
+- [elm-infra](#elm-infra)
+    - [So, What's This All About?](#so-whats-this-all-about)
+        - [Disambiguating "server"?](#disambiguating-server)
+    - [Using this Repo](#using-this-repo)
+        - [Bringing up new hosts](#bringing-up-new-hosts)
+        - [Deploying services](#deploying-services)
+    - [License](#license)
+
+<!-- markdown-toc end -->
+
 New infrastructure for elm-lang.org
 
 ## So, What's This All About?
