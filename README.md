@@ -73,8 +73,6 @@ Things you'll need (list will hopefully get shorter with time, not longer):
 To get started, `pipenv install && pipenv shell`.
 Next time you start the project, run `pipenv shell` in the directory, and that's it.
 
-## Doing Stuff
-
 ### Bringing up new hosts
 
 Once you have the servers up (`cd iac; terraform apply`), run the `bootstrap-python.yaml` playbook:
