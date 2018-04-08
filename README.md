@@ -66,9 +66,11 @@ all this comes together to form a cluster.
 
 Things you'll need (list will hopefully get shorter with time, not longer):
 
-- [pipenv](https://docs.pipenv.org) (install then `pipenv install && pipenv shell`)
+- [pipenv](https://docs.pipenv.org) (for Ansible and its dependencies)
 - [Docker](https://www.docker.com/community-edition) (for building containers)
+- [nomad](https://www.nomadproject.io/) (for deploying services)
 
+To get started, `pipenv install && pipenv shell`.
 Next time you start the project, run `pipenv shell` in the directory, and that's it.
 
 ## Doing Stuff
