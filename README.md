@@ -14,31 +14,31 @@ That lead me to these technology choices:
 
 - **Terraform and Ansible** for bringing up VMs.
 
-  The combination of these two mean that our complete infrastructure configuration is specified and checked in to git.
-  This also means no more SSHing in to VMs to make changes or restart services by hand.
+  *Why?* No more SSHing into VMs to make changes or restart services by hand (goals 1 and 2.)
 
-- **Docker** for packaging.
+  *Another Benefit:* All information about servers and their configuration are backed up and can be restored easily.
 
-  Using Docker gives us runtime isolation and repeatable deploys.
-  It means that when we say "I want `X` version of the package site" we always get `X` and the exact environment it was compiled in.
-  It is also a bit more secure than running things on the host system.
+- **Docker** for packaging and dependency isolation.
 
-  As a bonus, it makes upgrades and scaling much easier by separating concerns.
-  We can have a cluster that just runs whatever containers we specify and routes them how we configure.
+  *Why?* Deploys are simpler and more reliable because Docker isolates runtime dependencies (goal 1.)
+  Rollbacks become about as easy as deploys.
+
+  *Another Benefit:* It's slightly more secure than we would be otherwise.
+
+  *Long-term Benefit:* upgrading now gives us much more flexibility in the future.
+  Almost all new DevOps/infrastructure tools use Docker and/or can run Docker containers.
 
 - **Nomad, Consul, and Traefik** for scheduling, running, and routing traffic to containers.
 
-  Nomad allows you to specify a service by composing containers.
-  We can check in the number of containers running, their environment variables, and all the versions of software they're running.
+  *Why?* If a VM goes away, the things it was running will automatically move somewhere else to minimize downtime (goals 1, 2, and 3.)
 
-  Consul keeps track of where services are running, and Traefik reads that data to do inbound load balancing.
+  *Another Benefit:* All information about running services is backed up and can be restored easily.
+  We can also see what changes the system will make in advance.
 
-  All this is done based on the resources available.
-  So if a VM becomes unresponsive or needs to be taken out for security updates, the running services will be moved to a healthy host automatically.
+  *Long-term Benefit:* New services can be added without making any changes to the underlying infrastructure.
+  Existing services can be scaled up trivially to respond to an increase in traffic.
 
-  As a bonus, when we need to scale beyond one container instance, we can just say that.
-
-### What's a "server"?
+### Disambiguating "server"?
 
 The word "server" is really overloaded in this style of infrastructure.
 There are three levels:
